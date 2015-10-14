@@ -7,17 +7,29 @@ package com.mycompany.controllers;
 
 import com.mycompany.ciphers.CipherServices;
 import com.mycompany.languages.LANG;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+
+import java.nio.file.StandardOpenOption;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.ColorAdjustBuilder;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
  
 
 /**
@@ -27,10 +39,31 @@ import javafx.scene.control.ToggleGroup;
 public class MainController implements Initializable{
 private CipherServices services;
     
-    public MainController(CipherServices serv) {
+    private Stage primaryStage;
+    private FileChooser chooser = new FileChooser();
+    
+    /**
+     *
+     * @param serv
+     * @param primaryStage
+     */
+    public MainController(CipherServices serv,Stage primaryStage) {
         this.services = serv;
+        this.primaryStage = primaryStage;
+        chooser.getExtensionFilters().addAll(FXCollections.observableArrayList(
+                new FileChooser.ExtensionFilter("Text/Plain", "*.txt")
+        ));
     }
 
+    /**
+     *
+     * @return
+     */
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    
     
     @FXML
     private MenuItem btnClose;
@@ -71,47 +104,121 @@ private CipherServices services;
     @FXML
     private Button btnHack;
    
-   
+    @FXML
+    private TextField txKVal;
+    @FXML
+    private TextField txAVal;
     
     @FXML
-    void loadFromFile(ActionEvent event) {
-
-    }
-
+    private RadioMenuItem rbAthenaMode;
     @FXML
-    void saveToFile(ActionEvent event) {
-        
+    private RadioMenuItem rbCeaserMode;
+    
+    @FXML
+    private Label labOffset;
+    @FXML
+    private Label labK;
+    @FXML
+    private Label labA;
+    
+    
+    
+    @FXML
+    private ToggleGroup modes;
+    /**
+     *<p>Event for menu item Save to file</p>
+     *<p>Save to file result text which you crypt</p>
+     *  
+     * @param event
+     * @throws IOException 
+     */
+    @FXML
+    void loadFromFile(ActionEvent event) throws IOException {
+        taText.setText(Files.readAllLines(chooser.showOpenDialog(primaryStage).toPath(),Charset.defaultCharset()).stream().parallel().reduce("", (acc,a)->acc+a,(a1,a2)->a1+a2));
+    }
+    /**
+     * <p>Event for menu item Load from file</p>
+     * <p>Load from file text which you want to crypt</p>
+     * @param event
+     * @throws IOException 
+     */
+    @FXML
+    void saveToFile(ActionEvent event) throws IOException {
+        StandardOpenOption [] options = {StandardOpenOption.APPEND,StandardOpenOption.WRITE,StandardOpenOption.CREATE};
+        Files.write(this.chooser.showSaveDialog(primaryStage).toPath(), taResText.getText().getBytes(),options);
     }
     
-    
+    /**
+     * <p>Event for button Decipher</p>
+     * <p>Take encipher text and then try to decrypt it</p>
+     * @param event 
+     */
     @FXML
     void makeDecipher(ActionEvent event) {
-        taResText.setText(this.services.getCeaserEncipher().encipher(taText.getText().toLowerCase(), Integer.valueOf(this.txOffset.getText()), (LANG) languages.getSelectedToggle().getUserData()));
+        switch((String)modes.getSelectedToggle().getUserData()){
+            case "athena": taResText.setText(this.services.getAphineEncipher().decipher( taText.getText().toLowerCase().replaceAll(" ",""),  (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
+            case "ceaser": taResText.setText(this.services.getCeaserEncipher().decipher(taText.getText().toLowerCase().replaceAll(" ",""), Integer.valueOf(this.txOffset.getText())*(-1), (LANG) languages.getSelectedToggle().getUserData()));break;
+        }
     }
-
+    /**
+     * <p>Event for button Encipher</p>
+     * <p>Take text and options, then crypt it</p>
+     * @param event 
+     */
     @FXML
     void makeEncipher(ActionEvent event) {
-        taResText.setText(this.services.getCeaserEncipher().encipher(taText.getText().toLowerCase(), Integer.valueOf(this.txOffset.getText()), (LANG) languages.getSelectedToggle().getUserData()));
+        switch((String)modes.getSelectedToggle().getUserData()){
+            case "athena": taResText.setText(this.services.getAphineEncipher().encipher( taText.getText().toLowerCase().replaceAll(" ",""), (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
+            case "ceaser": taResText.setText(this.services.getCeaserEncipher().encipher(taText.getText().toLowerCase().replaceAll(" ", ""), Integer.valueOf(this.txOffset.getText()), (LANG) languages.getSelectedToggle().getUserData()));break;
+        }
+ 
     }
-
+    /**
+     * <p>Event for button Hacking</p>
+     * <p>Take text and try to hack it</p>
+     * @param event 
+     */
+    
     @FXML
     void makeHacking(ActionEvent event) {
-        taResText.setText(this.services.getCeaserEncipher().hack(taText.getText().toLowerCase(), Integer.valueOf(this.txOffset.getText()), (LANG) languages.getSelectedToggle().getUserData()));
+        
+        switch((String)modes.getSelectedToggle().getUserData()){
+            case "athena": break;
+            case "ceaser":taResText.setText(this.services.getCeaserEncipher().hack( taText.getText().toLowerCase().replaceAll(" ",""), (LANG) languages.getSelectedToggle().getUserData()));break;
+        }
     }
     
+    /**
+     * <p>Initialize whole application,bind properties for dynamic responce</p>
+     * @param url
+     * @param rb 
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         btnSave.disableProperty().bind(taResText.lengthProperty().lessThan(1));
         btnLoad.disableProperty().bind(taText.lengthProperty().greaterThan(1));
        
-        btnEnc.disableProperty().bind(taText.lengthProperty().lessThan(1).or(txOffset.lengthProperty().lessThan(1)));
-        btnDec.disableProperty().bind(taText.lengthProperty().lessThan(1).or(txOffset.lengthProperty().lessThan(1)));
+        btnEnc.disableProperty().bind((taText.lengthProperty().lessThan(1).or(txOffset.lengthProperty().lessThan(1)).and(rbAthenaMode.selectedProperty().not().or(txKVal.lengthProperty().lessThan(1)).or(txAVal.lengthProperty().lessThan(1)))));
+        btnDec.disableProperty().bind((taText.lengthProperty().lessThan(1).or(txOffset.lengthProperty().lessThan(1)).and(rbAthenaMode.selectedProperty().not().or(txKVal.lengthProperty().lessThan(1)).or(txAVal.lengthProperty().lessThan(1)))));
         btnHack.disableProperty().bind(taText.lengthProperty().lessThan(1));
+        
         
         rbEng.setUserData(LANG.Eng);
         rbRus.setUserData(LANG.Ru);
         rbUkr.setUserData(LANG.Ua);
         btnClose.addEventHandler(ActionEvent.ANY, (e)->{System.exit(0);});
+        
+        txOffset.visibleProperty().bind(rbCeaserMode.selectedProperty());
+        labOffset.visibleProperty().bind(rbCeaserMode.selectedProperty());
+        
+        txAVal.visibleProperty().bind(rbAthenaMode.selectedProperty());
+        txKVal.visibleProperty().bind(rbAthenaMode.selectedProperty());
+        labA.visibleProperty().bind(rbAthenaMode.selectedProperty());
+        labK.visibleProperty().bind(rbAthenaMode.selectedProperty());
+        
+        rbAthenaMode.setUserData("athena");
+        rbCeaserMode.setUserData("ceaser");
+        
     }
     
 }

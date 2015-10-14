@@ -7,12 +7,23 @@ package com.mycompany.languages;
  */
 public enum LANG {
 
+    /**
+     *
+     */
     Eng() { 
         public String getHackTable(){ return "etiaonsrhcldpyumfbgwvkxqzj";}
     },
+
+    /**
+     *
+     */
     Ru()  { 
         public String getHackTable(){ return "онаитверіскмдлупязьгчбхцюжйїєфшщґ";}
     },
+
+    /**
+     *
+     */
     Ua()  { 
         public String getHackTable(){ return "онаитверіскмдлупязьгчбхцюжйїєфшщґ";}
     };
@@ -27,6 +38,10 @@ public enum LANG {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public String getAlphabet(){
          switch (this){
             case Eng:return "etiaonsrhcldpyumfbgwvkxqzj";

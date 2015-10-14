@@ -1,5 +1,6 @@
 package com.mycompany.ciphers;
 
+import com.mycompany.ciphers.annotations.AthenasCipher;
 import com.mycompany.ciphers.annotations.CeaserCipher;
 
 import javax.inject.Inject;
@@ -11,12 +12,25 @@ import javax.inject.Inject;
  */
 public class CipherServices {
     @Inject @CeaserCipher private Cipher ceaserEncipher;
-    //@Inject @AphineCipher Cipher aphineEncipher;
+    @Inject @AthenasCipher Cipher aphineEncipher;
  
+    /**
+     *
+     * @return
+     */
     public Cipher getCeaserEncipher() {
         return ceaserEncipher;
     }
 
+    /**
+     *
+     * @return
+     */
+    public Cipher getAphineEncipher() {
+        return aphineEncipher;
+    }
+
+    
     
     
     
