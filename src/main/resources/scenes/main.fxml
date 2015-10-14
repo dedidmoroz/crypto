@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="420.0" prefWidth="549.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.controllers.MainController">
+   <top>
+      <MenuBar prefHeight="29.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <menus>
+            <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem fx:id="btnClose" mnemonicParsing="false" text="Close" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+               <items>
+                  <MenuItem fx:id="btnLoad" mnemonicParsing="false" onAction="#loadFromFile" text="Load from file" />
+                  <MenuItem fx:id="btnSave" mnemonicParsing="false" onAction="#saveToFile" text="Save to file" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="About" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="549.0" BorderPane.alignment="CENTER">
+         <children>
+            <RadioButton fx:id="rbUkr" layoutX="14.0" layoutY="359.0" mnemonicParsing="false" text="Ukrainian">
+               <toggleGroup>
+                  <ToggleGroup fx:id="languages" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="rbEng" layoutX="119.0" layoutY="359.0" mnemonicParsing="false" text="English" toggleGroup="$languages" />
+            <RadioButton fx:id="rbRus" layoutX="210.0" layoutY="359.0" mnemonicParsing="false" selected="true" text="Russian" toggleGroup="$languages" />
+            <TextArea fx:id="taText" layoutX="6.0" layoutY="8.0" prefHeight="269.0" prefWidth="227.0" promptText="Main text" />
+            <TextArea fx:id="taResText" layoutX="308.0" layoutY="8.0" prefHeight="269.0" prefWidth="227.0" promptText="Result" />
+            <TextField fx:id="txOffset" layoutX="58.0" layoutY="308.0" prefHeight="26.0" prefWidth="133.0" promptText="Enter offset" />
+            <Label layoutX="14.0" layoutY="313.0" text="Offset" />
+            <Button fx:id="btnEnc" layoutX="244.0" layoutY="308.0" mnemonicParsing="false" onAction="#makeEncipher" text="Encipher" />
+            <Button fx:id="btnDec" layoutX="335.0" layoutY="308.0" mnemonicParsing="false" onAction="#makeDecipher" prefHeight="26.0" prefWidth="94.0" text="Decipher" />
+            <Button fx:id="btnHack" layoutX="441.0" layoutY="308.0" mnemonicParsing="false" onAction="#makeHacking" prefHeight="26.0" prefWidth="74.0" text="Hack" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
