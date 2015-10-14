@@ -43,7 +43,7 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="549.0" BorderPane.alignment="CENTER">
          <children>
-            <RadioButton fx:id="rbUkr" layoutX="7.0" layoutY="359.0" mnemonicParsing="false" text="Ukrainian" textFill="#ad9f8ef4">
+            <RadioButton fx:id="rbUkr" layoutX="7.0" layoutY="359.0" mnemonicParsing="false" text="Ukrainian" textFill="#e8d2bae5">
                <toggleGroup>
                   <ToggleGroup fx:id="languages" />
                </toggleGroup>
@@ -51,11 +51,11 @@
                   <Font size="13.0" />
                </font>
             </RadioButton>
-            <RadioButton fx:id="rbEng" layoutX="92.0" layoutY="359.0" mnemonicParsing="false" text="English" textFill="#ad9f8ef4" toggleGroup="$languages">
+            <RadioButton fx:id="rbEng" layoutX="92.0" layoutY="359.0" mnemonicParsing="false" text="English" textFill="#e8d2bae5" toggleGroup="$languages">
                <font>
                   <Font size="13.0" />
                </font></RadioButton>
-            <RadioButton fx:id="rbRus" layoutX="165.0" layoutY="359.0" mnemonicParsing="false" selected="true" text="Russian" textFill="#ad9f8ef4" toggleGroup="$languages">
+            <RadioButton fx:id="rbRus" layoutX="165.0" layoutY="359.0" mnemonicParsing="false" selected="true" text="Russian" textFill="#e8d2bae5" toggleGroup="$languages">
                <font>
                   <Font size="13.0" />
                </font></RadioButton>
@@ -71,33 +71,33 @@
                <font>
                   <Font size="13.0" />
                </font></TextField>
-            <Label fx:id="labOffset" layoutX="6.0" layoutY="312.0" text="Offset" textFill="#ad9f8ef4">
+            <Label fx:id="labOffset" layoutX="6.0" layoutY="312.0" text="Offset" textFill="#e8d2bae5">
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <Button fx:id="btnEnc" layoutX="258.0" layoutY="350.0" mnemonicParsing="false" onAction="#makeEncipher" text="Encipher" textFill="#ad9f8ef4" textOverrun="WORD_ELLIPSIS">
+            <Button fx:id="btnEnc" layoutX="258.0" layoutY="350.0" mnemonicParsing="false" onAction="#makeEncipher" text="Encipher" textFill="#e8d2bae5" textOverrun="WORD_ELLIPSIS">
                <font>
                   <Font size="16.0" />
                </font></Button>
-            <Button fx:id="btnDec" layoutX="349.0" layoutY="350.0" mnemonicParsing="false" onAction="#makeDecipher" prefHeight="26.0" prefWidth="94.0" text="Decipher" textFill="#ad9f8ef4">
+            <Button fx:id="btnDec" layoutX="349.0" layoutY="350.0" mnemonicParsing="false" onAction="#makeDecipher" prefHeight="26.0" prefWidth="94.0" text="Decipher" textFill="#e8d2bae5">
                <font>
                   <Font size="16.0" />
                </font></Button>
-            <Button fx:id="btnHack" layoutX="455.0" layoutY="350.0" mnemonicParsing="false" onAction="#makeHacking" prefHeight="26.0" prefWidth="74.0" text="Hack" textFill="#ad9f8ef4">
+            <Button fx:id="btnHack" layoutX="455.0" layoutY="350.0" mnemonicParsing="false" onAction="#makeHacking" prefHeight="26.0" prefWidth="74.0" text="Hack" textFill="#e8d2bae5">
                <font>
                   <Font size="16.0" />
                </font></Button>
-            <Label layoutX="26.0" layoutY="7.0" prefHeight="27.0" prefWidth="120.0" text="Input text" textFill="#ad9f8ef4">
+            <Label layoutX="26.0" layoutY="7.0" prefHeight="27.0" prefWidth="120.0" text="Input text" textFill="#e8d2bae5">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="309.0" layoutY="7.0" text="Result text" textFill="#ad9f8ef4">
+            <Label layoutX="309.0" layoutY="7.0" text="Result text" textFill="#e8d2bae5">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="labA" layoutX="6.0" layoutY="312.0" text="A" textFill="#ad9f8ef4">
+            <Label fx:id="labA" layoutX="6.0" layoutY="312.0" text="A" textFill="#e8d2bae5">
                <font>
                   <Font size="15.0" />
                </font>
@@ -112,7 +112,7 @@
                   <Font size="13.0" />
                </font>
             </TextField>
-            <Label fx:id="labK" layoutX="119.0" layoutY="312.0" text="K" textFill="#ad9f8ef4">
+            <Label fx:id="labK" layoutX="119.0" layoutY="312.0" text="K" textFill="#e8d2bae5">
                <font>
                   <Font size="15.0" />
                </font>

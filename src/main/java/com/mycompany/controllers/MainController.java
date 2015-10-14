@@ -26,8 +26,6 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.ColorAdjustBuilder;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
  
