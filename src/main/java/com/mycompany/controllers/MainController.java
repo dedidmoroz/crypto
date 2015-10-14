@@ -70,6 +70,8 @@ private CipherServices services;
 
     @FXML
     private Button btnHack;
+   
+   
     
     @FXML
     void loadFromFile(ActionEvent event) {
@@ -84,17 +86,17 @@ private CipherServices services;
     
     @FXML
     void makeDecipher(ActionEvent event) {
-
+        taResText.setText(this.services.getCeaserEncipher().encipher(taText.getText().toLowerCase(), Integer.valueOf(this.txOffset.getText()), (LANG) languages.getSelectedToggle().getUserData()));
     }
 
     @FXML
     void makeEncipher(ActionEvent event) {
-        taResText.setText(this.services.getCeaserEncipher().encipher(taText.getText().toLowerCase(), Integer.valueOf(this.txOffset.getText()), LANG.Ua));
+        taResText.setText(this.services.getCeaserEncipher().encipher(taText.getText().toLowerCase(), Integer.valueOf(this.txOffset.getText()), (LANG) languages.getSelectedToggle().getUserData()));
     }
 
     @FXML
     void makeHacking(ActionEvent event) {
-        
+        taResText.setText(this.services.getCeaserEncipher().hack(taText.getText().toLowerCase(), Integer.valueOf(this.txOffset.getText()), (LANG) languages.getSelectedToggle().getUserData()));
     }
     
     @Override
@@ -104,8 +106,12 @@ private CipherServices services;
        
         btnEnc.disableProperty().bind(taText.lengthProperty().lessThan(1).or(txOffset.lengthProperty().lessThan(1)));
         btnDec.disableProperty().bind(taText.lengthProperty().lessThan(1).or(txOffset.lengthProperty().lessThan(1)));
-        btnHack.disableProperty().bind(taText.lengthProperty().lessThan(1).or(txOffset.lengthProperty().lessThan(1)));
+        btnHack.disableProperty().bind(taText.lengthProperty().lessThan(1));
         
+        rbEng.setUserData(LANG.Eng);
+        rbRus.setUserData(LANG.Ru);
+        rbUkr.setUserData(LANG.Ua);
+        btnClose.addEventHandler(ActionEvent.ANY, (e)->{System.exit(0);});
     }
     
 }

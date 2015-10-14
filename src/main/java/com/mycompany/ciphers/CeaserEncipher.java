@@ -5,7 +5,8 @@ import com.mycompany.ciphers.annotations.CeaserCipher;
 import com.mycompany.languages.LANG;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
+import java.util.TreeMap;
 
 /**
  *
@@ -17,7 +18,7 @@ public class CeaserEncipher implements Cipher{
     private Integer offset;
     private LANG language;
     private List<Character> text = new ArrayList<>();
-    
+    private char [] alph;
             
     public CeaserEncipher() {
 
@@ -47,6 +48,14 @@ public class CeaserEncipher implements Cipher{
     public List<Character> getText() {
         return text;
     }
+
+    public void setAlph(char[] alph) {
+        this.alph = alph;
+    }
+
+    public char[] getAlph() {
+        return alph;
+    }
    
     
     
@@ -55,7 +64,7 @@ public class CeaserEncipher implements Cipher{
     public void initialize(String line, Integer offset, LANG lang) {
             this.setLanguage(lang);
             this.setOffset(offset);
-            
+            this.setAlph(this.language.toString().toCharArray());
             this.getText().clear();
             for(Character i: line.toCharArray()){
                 this.getText().add(i);
@@ -66,27 +75,34 @@ public class CeaserEncipher implements Cipher{
     @Override
     public String encipher(String line, Integer offset, LANG lang) {
         this.initialize(line, offset, lang);
-        char [] alph = this.language.toString().toCharArray();
         
-        System.out.println(alph);
-        
-        List result =  this.getText().stream().parallel().map( (e) -> {
-            return alph[(this.language.toString().indexOf(e) + this.offset) % alph.length];
-        }).collect(Collectors.toList());
-        
-        System.out.println(result);
-        
-        return null;
+        return this.getText().stream().parallel().map( (e) -> {
+            return alph[((this.language.toString().indexOf(e) + this.offset)+alph.length) % alph.length];
+        }).<String>reduce("", (acc,b)->{return acc+b;},(a,b)->{return a+b;});
     }
 
     @Override
     public String decipher(String line, Integer offset, LANG lang) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return encipher(line, offset, lang);
     }
-
+    
+    private long max = 0;
+    private char key;
+    private int step = -1;
     @Override
     public String hack(String line, Integer offset, LANG lang) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.initialize(line, offset, lang);
+        this.step++;
+        
+        TreeMap<Character,Long> hacktable = new TreeMap<>((k1,k2) -> {if ((byte)k1.charValue() > (byte)k2.charValue()) return 1; else return -1;});
+        text.stream().parallel().forEach((e)->{
+            hacktable.put(e, text.stream().filter(i -> Objects.equals(e, i)).count());
+        });
+        hacktable.entrySet().stream().forEach((entry) -> {
+            if(entry.getValue().longValue() > max) {max = entry.getValue().longValue(); key = entry.getKey().charValue();}
+        });
+        
+        return this.encipher(line, (byte)lang.getAlphabet().charAt(step) - (byte)key, lang);
     }
 
     

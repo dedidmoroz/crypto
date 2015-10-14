@@ -26,6 +26,15 @@ public enum LANG {
             default:return null;
         }
     }
+    
+    public String getAlphabet(){
+         switch (this){
+            case Eng:return "etiaonsrhcldpyumfbgwvkxqzj";
+            case Ru: return "онаитверіскмдлупязьгчбхцюжйїєфшщґ";
+            case Ua :return "онаитверіскмдлупязьгчбхцюжйїєфшщґ";
+            default:return null;
+        }
+    }
    
     
     
