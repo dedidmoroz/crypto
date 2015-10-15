@@ -1,6 +1,7 @@
 package com.mycompany.ciphers;
 
 import com.mycompany.ciphers.annotations.AthenasCipher;
+import com.mycompany.ciphers.annotations.BBSCipher;
 import com.mycompany.ciphers.annotations.CeaserCipher;
 
 import javax.inject.Inject;
@@ -12,26 +13,33 @@ import javax.inject.Inject;
  */
 public class CipherServices {
     @Inject @CeaserCipher private Cipher ceaserEncipher;
-    @Inject @AthenasCipher Cipher aphineEncipher;
- 
-    /**
+    @Inject @AthenasCipher Cipher athenasEncipher;
+    @Inject @BBSCipher Cipher bbsEncipher;
+    
+   /**
      *
-     * @return
+     * @return service of crypting data using Ceaser algorithm 
      */
     public Cipher getCeaserEncipher() {
         return ceaserEncipher;
     }
 
-    /**
-     *
-     * @return
-     */
+  /**
+    *
+    * @return service of crypting data using Athenas algorithm 
+    */
     public Cipher getAphineEncipher() {
-        return aphineEncipher;
+        return athenasEncipher;
     }
 
+  /**
+    *
+    * @return service of crypting data using BBS algorithm 
+    */
     
-    
-    
+	public Cipher getBbsEncipher() {
+		return bbsEncipher;
+	}
+
     
 }

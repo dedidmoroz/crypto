@@ -12,9 +12,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.inject.Qualifier;
 
+
+
 /**
+ * 
+ * @author User
+ * @version 1.0
+ * <p>Uses for setting Ceaser algorithm in project</p>
  *
- * @author scarlet_skull
  */
 @Qualifier
 @Documented

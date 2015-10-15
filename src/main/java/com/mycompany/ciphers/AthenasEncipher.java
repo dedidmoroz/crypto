@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * <p>Implement algorithm of AthenasCipher</p>
+ * <p>Uses this implemetation by container and inject dependency into service</p>
  * @author User
  * @version 1.0
  */
 @AthenasCipher
 public class AthenasEncipher implements Cipher{
     
-    private Integer offset;
     private LANG language;
     private List<Character> text = new ArrayList<>();
     private char [] alph;
@@ -32,17 +32,6 @@ public class AthenasEncipher implements Cipher{
      */
     public AthenasEncipher() {  }
 
-    /**
-     * <p>Needs for get offset of symbol</p>
-     * @return
-     */
-    public Integer getOffset() {  return offset; }
-
-    /**
-     * <p>Needs for set offset of symbol</p>
-     * @param offset
-     */
-    public void setOffset(Integer offset) { this.offset = offset; }
 
     /**
      * <p>Needs for get language of text</p> 
@@ -104,6 +93,13 @@ public class AthenasEncipher implements Cipher{
      */
     public void setA(int A) {  this.A = A;  }
 
+    
+    /**
+     * <p>Uses for hacking</p>
+     * <p>But hack a program, not a cipher</p>
+     * @deprecated
+     * 
+     */
     private Map<Integer,Integer> alphTable = new HashMap<>();
     
     /**
@@ -112,12 +108,12 @@ public class AthenasEncipher implements Cipher{
      * @param lang
      * @param A
      * @param K
+     * 
      */
     
     @Override
     public void initialize(String line, LANG lang, int A, int K) {
             this.setLanguage(lang);
-            this.setOffset(offset);
             this.setAlph(this.language.toString().toCharArray());
             this.setA(A);
             this.setK(K);
@@ -139,6 +135,7 @@ public class AthenasEncipher implements Cipher{
     @Override
     public String encipher(String line, LANG lang, int A, int K) {
         this.initialize(line, lang, A, K);
+        this.alphTable.clear();
         return   this.getText()
                 .stream()
                 .parallel()
@@ -159,11 +156,6 @@ public class AthenasEncipher implements Cipher{
     @Override
     public String decipher(String line, LANG lang, int A, int K) {
         this.initialize(line, lang, A, K);
-//        return   this.getText()
-//                .stream()
-//                .parallel()
-//                .map((e)->{return alph[this.alphTable.get(this.language.toString().indexOf(e))]; })
-//                .<String>reduce("", (acc,t) -> acc+t,(a1,a2) -> a1+a2);
         return decrypt(line, A, K);
 
     }
@@ -223,13 +215,18 @@ public class AthenasEncipher implements Cipher{
      * <p>Takes languages and text which you need to hack</p>
      * @param line Text for hacking
      * @param lang Languages of the text
-     * @return Nothing =)
+     * @return a line of hack string if everesing is good
      * @since 0.1
      */
     @Override
     public String hack(String line, LANG lang) {
-        this.initialize(line, lang, A, K);
-        return "";
+    	this.initialize(line, lang, A, K);
+    	return   this.getText()                                                                      
+    			.stream()                                                                            
+    			.parallel()                                                                          
+    			.map((e)->{return alph[this.alphTable.get(this.language.toString().indexOf(e))]; })  
+    			.<String>reduce("", (acc,t) -> acc+t,(a1,a2) -> a1+a2);                              
+        
     }
     
 }

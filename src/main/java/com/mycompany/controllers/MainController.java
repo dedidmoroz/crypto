@@ -14,6 +14,9 @@ import java.nio.file.Files;
 
 import java.nio.file.StandardOpenOption;
 import java.util.ResourceBundle;
+
+import javax.swing.JOptionPane;
+
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,6 +29,11 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
  
@@ -111,6 +119,8 @@ private CipherServices services;
     private RadioMenuItem rbAthenaMode;
     @FXML
     private RadioMenuItem rbCeaserMode;
+    @FXML
+    private RadioMenuItem rbBSSMode;
     
     @FXML
     private Label labOffset;
@@ -134,7 +144,7 @@ private CipherServices services;
     void loadFromFile(ActionEvent event) throws IOException {
         taText.setText(Files.readAllLines(chooser.showOpenDialog(primaryStage).toPath(),Charset.defaultCharset()).stream().parallel().reduce("", (acc,a)->acc+a,(a1,a2)->a1+a2));
     }
-    /**
+   /**
      * <p>Event for menu item Load from file</p>
      * <p>Load from file text which you want to crypt</p>
      * @param event
@@ -168,6 +178,8 @@ private CipherServices services;
         switch((String)modes.getSelectedToggle().getUserData()){
             case "athena": taResText.setText(this.services.getAphineEncipher().encipher( taText.getText().toLowerCase().replaceAll(" ",""), (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
             case "ceaser": taResText.setText(this.services.getCeaserEncipher().encipher(taText.getText().toLowerCase().replaceAll(" ", ""), Integer.valueOf(this.txOffset.getText()), (LANG) languages.getSelectedToggle().getUserData()));break;
+            case "bbs": taResText.setText(this.services.getBbsEncipher().encipher( taText.getText().toLowerCase().replaceAll(" ",""), (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
+            
         }
  
     }
@@ -181,10 +193,12 @@ private CipherServices services;
     void makeHacking(ActionEvent event) {
         
         switch((String)modes.getSelectedToggle().getUserData()){
-            case "athena": break;
+            case "athena":taResText.setText(this.services.getAphineEncipher().hack(taText.getText().toLowerCase().replaceAll(" ",""), (LANG) languages.getSelectedToggle().getUserData()));break;
             case "ceaser":taResText.setText(this.services.getCeaserEncipher().hack( taText.getText().toLowerCase().replaceAll(" ",""), (LANG) languages.getSelectedToggle().getUserData()));break;
         }
     }
+    
+
     
     /**
      * <p>Initialize whole application,bind properties for dynamic responce</p>
@@ -196,8 +210,27 @@ private CipherServices services;
         btnSave.disableProperty().bind(taResText.lengthProperty().lessThan(1));
         btnLoad.disableProperty().bind(taText.lengthProperty().greaterThan(1));
        
-        btnEnc.disableProperty().bind((taText.lengthProperty().lessThan(1).or(txOffset.lengthProperty().lessThan(1)).and(rbAthenaMode.selectedProperty().not().or(txKVal.lengthProperty().lessThan(1)).or(txAVal.lengthProperty().lessThan(1)))));
-        btnDec.disableProperty().bind((taText.lengthProperty().lessThan(1).or(txOffset.lengthProperty().lessThan(1)).and(rbAthenaMode.selectedProperty().not().or(txKVal.lengthProperty().lessThan(1)).or(txAVal.lengthProperty().lessThan(1)))));
+        btnEnc.disableProperty().bind(
+        			(taText.lengthProperty().lessThan(1).or(txOffset.lengthProperty().lessThan(1))
+        		.and(rbAthenaMode.selectedProperty().not()
+        				.or(txKVal.lengthProperty().lessThan(1))
+        				.or(taText.lengthProperty().lessThan(1))
+        				.or(txAVal.lengthProperty().lessThan(1)))
+        		.and(rbBSSMode.selectedProperty().not()
+               			.or(txKVal.lengthProperty().lessThan(1))
+          				.or(taText.lengthProperty().lessThan(1))
+           				.or(txAVal.lengthProperty().lessThan(1)))));
+        btnDec.disableProperty().bind(
+        			(taText.lengthProperty().lessThan(1).or(txOffset.lengthProperty().lessThan(1))
+        		.and(rbAthenaMode.selectedProperty().not()
+        				.or(txKVal.lengthProperty().lessThan(1))
+        				.or(taText.lengthProperty().lessThan(1))
+        				.or(txAVal.lengthProperty().lessThan(1)))
+        		.and(rbBSSMode.selectedProperty().not()
+           				.or(txKVal.lengthProperty().lessThan(1))
+           				.or(taText.lengthProperty().lessThan(1))
+           				.or(txAVal.lengthProperty().lessThan(1)))));
+       
         btnHack.disableProperty().bind(taText.lengthProperty().lessThan(1));
         
         
@@ -209,14 +242,30 @@ private CipherServices services;
         txOffset.visibleProperty().bind(rbCeaserMode.selectedProperty());
         labOffset.visibleProperty().bind(rbCeaserMode.selectedProperty());
         
-        txAVal.visibleProperty().bind(rbAthenaMode.selectedProperty());
-        txKVal.visibleProperty().bind(rbAthenaMode.selectedProperty());
-        labA.visibleProperty().bind(rbAthenaMode.selectedProperty());
-        labK.visibleProperty().bind(rbAthenaMode.selectedProperty());
+        txAVal.visibleProperty().bind(rbAthenaMode.selectedProperty().or(rbBSSMode.selectedProperty()));
+        txKVal.visibleProperty().bind(rbAthenaMode.selectedProperty().or(rbBSSMode.selectedProperty()));
+    
+        labA.visibleProperty().bind(rbAthenaMode.selectedProperty().or(rbBSSMode.selectedProperty()));
+        labK.visibleProperty().bind(rbAthenaMode.selectedProperty().or(rbBSSMode.selectedProperty()));
         
         rbAthenaMode.setUserData("athena");
         rbCeaserMode.setUserData("ceaser");
-        
+        rbBSSMode.setUserData("bbs");
+        taText.setOnDragEntered(e-> {taText.setStyle("-fx-background-color:red;");});
+        taText.setOnDragExited(e-> {taText.setStyle("-fx-background-color:teal;");});
+        taText.setOnDragOver(e->{ e.acceptTransferModes(TransferMode.ANY); });
+        taText.setOnDragDropped(event-> {
+        	Dragboard board = event.getDragboard();
+        	
+        	if(board.hasFiles()){
+        		try {
+        			taText.setText(Files.readAllLines(board.getFiles().get(0).toPath(),Charset.defaultCharset()).stream().parallel().reduce("", (acc,a)->acc+a,(a1,a2)->a1+a2).replaceAll(" *", ""));
+        		} catch (Exception e1) {
+        			// TODO Auto-generated catch block 
+        			e1.printStackTrace();}
+        	} else {
+        		JOptionPane.showMessageDialog(null, "Problem with loaded file.");
+        	}});
     }
     
 }

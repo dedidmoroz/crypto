@@ -13,8 +13,11 @@ import java.lang.annotation.Target;
 import javax.inject.Qualifier;
 
 /**
+ * 
+ * @author User
+ * @version 1.0
+ * <p>Uses for setting Athenas algorithm in project</p>
  *
- * @author scarlet_skull
  */
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)

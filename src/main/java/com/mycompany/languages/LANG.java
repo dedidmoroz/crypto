@@ -8,22 +8,33 @@ package com.mycompany.languages;
 public enum LANG {
 
     /**
-     *
-     */
+   * <p>Inner class of current enum</p>
+   * <p>Uses for returning frequency table of each english symbol</p>
+   * @see LANG
+   */
+  
     Eng() { 
         public String getHackTable(){ return "etiaonsrhcldpyumfbgwvkxqzj";}
     },
 
-    /**
-     *
-     */
+   
+   
+  /**
+   * <p>Inner class of current enum</p>
+   * <p>Uses for returning frequency table of each russian symbol</p>
+   * @see LANG
+   */
     Ru()  { 
         public String getHackTable(){ return "онаитверіскмдлупязьгчбхцюжйїєфшщґ";}
     },
 
-    /**
-     *
-     */
+    
+    
+  /**
+   * <p>Inner class of current enum</p>
+   * <p>Uses for returning frequency table of each ukrainian symbol</p>
+   * @see LANG
+   */
     Ua()  { 
         public String getHackTable(){ return "онаитверіскмдлупязьгчбхцюжйїєфшщґ";}
     };
@@ -39,7 +50,7 @@ public enum LANG {
     }
     
     /**
-     *
+     * <p>Return frequencies for each laguages </p>
      * @return
      */
     public String getAlphabet(){

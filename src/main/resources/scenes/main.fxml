@@ -30,6 +30,7 @@
                      </toggleGroup>
                   </RadioMenuItem>
                   <RadioMenuItem fx:id="rbCeaserMode" mnemonicParsing="false" selected="true" style="-fx-font-size: 13;" text="Ceasar Mode" toggleGroup="$modes" />
+                  <RadioMenuItem fx:id="rbBSSMode" mnemonicParsing="false" style="-fx-font-size: 13;" text="BBS Mode" toggleGroup="$modes" />
               </items>
             </Menu>
             <Menu mnemonicParsing="false" style="-fx-font-size: 14; -fx-text-family: serif; -fx-text-fill: rgb(173,159,142);" text="Help">

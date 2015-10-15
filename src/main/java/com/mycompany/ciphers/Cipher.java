@@ -22,7 +22,7 @@ public interface Cipher {
      * @param lang
      */
     default public void initialize(String line,Integer offset,LANG lang){};
-
+    
     /**
      * <p>initialize Athenas encipher class</p>
      * @param line
@@ -31,6 +31,14 @@ public interface Cipher {
      * @param K
      */
     default public void initialize(String line,LANG lang,int A,int K) {};
+    /**
+     * <p>initialize Athenas encipher class</p>
+     * @param line
+     * @param lang
+     * @param A
+     * @param K
+     */
+    default public Boolean initialize(int A,int K) {return null;};
     
     /**
      * <p>Make crypt a text</p>
