@@ -14,7 +14,7 @@ public enum LANG {
    */
   
     Eng() { 
-        public String getHackTable(){ return "etiaonsrhcldpyumfbgwvkxqzj";}
+        public String getHackTable(){return super.getAlphabet();}
     },
 
    
@@ -25,7 +25,7 @@ public enum LANG {
    * @see LANG
    */
     Ru()  { 
-        public String getHackTable(){ return "онаитверіскмдлупязьгчбхцюжйїєфшщґ";}
+        public String getHackTable(){ return super.getAlphabet();}
     },
 
     
@@ -36,13 +36,13 @@ public enum LANG {
    * @see LANG
    */
     Ua()  { 
-        public String getHackTable(){ return "онаитверіскмдлупязьгчбхцюжйїєфшщґ";}
+        public String getHackTable(){ return super.getAlphabet();}
     };
 
     @Override
     public String toString() {
         switch (this){
-            case Eng:return "abcdefghijklmnopqrstuvwxyz";
+            case Eng:return "abcdefghijklmnopqrstuvwxyz@{}_:.,?!#$%^&*()-+=\"';<>";
             case Ru: return "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
             case Ua :return "абвгґдеєжзиіїйклмнопрстуфхцчшщьюя";
             default:return null;

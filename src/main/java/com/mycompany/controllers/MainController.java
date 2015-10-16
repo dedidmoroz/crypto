@@ -33,6 +33,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.controlsfx.dialog.Dialogs;
  
 
 /**
@@ -197,7 +198,23 @@ private CipherServices services;
         }
     }
     
-
+    /**
+     * <p>Open About modal</p>
+     * <p>Show information about program,manufacturer, developers</p>
+     * @param event 
+     * @deprecated Dialogs
+     */
+    @FXML
+    void showInfo(ActionEvent event) {
+        
+        Dialogs.create()
+                .masthead("Cryptographic software")
+                .title("About program")
+                .message("This cryptographic software was created for CNU")
+                
+                .owner(primaryStage).showInformation();
+    }
+    
     
     /**
      * <p>Initialize whole application,bind properties for dynamic responce</p>

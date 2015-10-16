@@ -7,13 +7,13 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="420.0" prefWidth="543.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.controllers.MainController">
+<BorderPane prefHeight="420.0" prefWidth="543.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.controllers.MainController">
    <top>
       <MenuBar prefHeight="0.0" prefWidth="549.0" BorderPane.alignment="CENTER">
          <menus>
             <Menu mnemonicParsing="false" style="-fx-font-size: 12; -fx-text-family: serif;" text="File">
                <items>
-                  <MenuItem fx:id="btnClose" mnemonicParsing="false" style="-fx-font-size: 11;" text="Close" />
+                  <MenuItem fx:id="btnClose" mnemonicParsing="false" style="-fx-text-fill: black;" text="Close" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" style="-fx-font-size: 12; -fx-text-family: serif;" text="Edit">
@@ -24,18 +24,18 @@
             </Menu>
             <Menu mnemonicParsing="false" style="-fx-font-size: 12; -fx-text-family: serif;" text="Mode">
               <items>
-                  <RadioMenuItem fx:id="rbAthenaMode" mnemonicParsing="false" style="-fx-font-size: 11;" text="Athenas Mode">
+                  <RadioMenuItem fx:id="rbAthenaMode" mnemonicParsing="false" style="-fx-text-fill: black;" text="Athenas Mode">
                      <toggleGroup>
                         <ToggleGroup fx:id="modes" />
                      </toggleGroup>
                   </RadioMenuItem>
-                  <RadioMenuItem fx:id="rbCeaserMode" mnemonicParsing="false" selected="true" style="-fx-font-size: 11;" text="Ceasar Mode" toggleGroup="$modes" />
-                  <RadioMenuItem fx:id="rbBSSMode" mnemonicParsing="false" style="-fx-font-size: 11;" text="BBS Mode" toggleGroup="$modes" />
+                  <RadioMenuItem fx:id="rbCeaserMode" mnemonicParsing="false" selected="true" style="-fx-text-fill: black;" text="Ceasar Mode" toggleGroup="$modes" />
+                  <RadioMenuItem fx:id="rbBSSMode" mnemonicParsing="false" style="-fx-text-fill: black;" text="BBS Mode" toggleGroup="$modes" />
               </items>
             </Menu>
             <Menu mnemonicParsing="false" style="-fx-font-size: 12; -fx-text-family: serif;" text="Help">
                <items>
-                  <MenuItem mnemonicParsing="false" style="-fx-font-size: 11;" text="About" />
+                  <MenuItem mnemonicParsing="false" onAction="#showInfo" style="-fx-text-fill: black;" text="About" />
                </items>
             </Menu>
          </menus>
