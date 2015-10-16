@@ -22,7 +22,6 @@
  
 .button {
     -fx-background-color: transparent;
-    -fx-text-color:white;
 }
  
 .button:hover {

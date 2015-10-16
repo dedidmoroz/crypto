@@ -154,7 +154,7 @@ public class BBSEnchipher implements Cipher{
      * @param K Special number for sum
      * @return String, if operation is done, else return null
      */
-	private int generationsCount = 0;
+	
 	@Override
 	public String encipher(String line, LANG lang, int A, int K) {
 		this.initialize(line, lang, A, K);
@@ -162,14 +162,16 @@ public class BBSEnchipher implements Cipher{
 			JOptionPane.showMessageDialog(null, "Your numbers are not congruence.");
 			return "";
 		}
-		this.setBloomNumber(A*K);
-		//Special number which must be simple
-		int rand = gcd(new Random(0).nextInt(), this.getBloomNumber());
-		this.generationsCount = (int) (Math.pow(rand, 2) % this.getBloomNumber().intValue()); 
-		return this.text.stream().parallel().map((e) -> {                                                      
-			this.generationsCount = (int) (Math.pow(this.generationsCount, 2) % this.getBloomNumber()); 
-			return this.alph[this.generationsCount % 2];                                                     
-		}).<String>reduce("",(acc,txt)-> acc + txt,(a1,a2)-> a1+a2);                                    
+		this.setBloomNumber(this.alph.length);
+                int [] arrayOfSymbIndexes = new int[this.getAlph().length];
+                for(int i = 0;i< arrayOfSymbIndexes.length;i++){
+                    arrayOfSymbIndexes[i]= ((this.getA() * i +this.getK()) % this.getBloomNumber());
+                    System.out.print(arrayOfSymbIndexes[i]+ " ");
+                }
+                return this.text.stream()
+                        .parallel()
+                        .map((e) -> { return this.getAlph()[arrayOfSymbIndexes[language.toString().indexOf(e)]];  })
+                        .<String>reduce("",(acc,txt)-> acc + txt,(a1,a2)-> a1+a2);                                    
 	}
 	
 	
@@ -200,9 +202,23 @@ public class BBSEnchipher implements Cipher{
     	if(!initialize(A, K)){
 			JOptionPane.showMessageDialog(null, "Your numbers are not congruence.");
 			return "";
-		}
-    	
-        return null;
+	}
+    this.setBloomNumber(40);
+    int [] arrayOfSymbIndexes = new int[this.getAlph().length];
+    for(int i = 0;i< arrayOfSymbIndexes.length;i++){
+        arrayOfSymbIndexes[i]= ((this.getA() * i +this.getK()) % this.getBloomNumber());
+        System.out.print(arrayOfSymbIndexes[i]+ " ");
+    }
+    
+    StringBuffer cryptoText  = new StringBuffer();
+    for(int i =0;i< this.getAlph().length;i++){
+        cryptoText.append(this.getAlph()[arrayOfSymbIndexes[i]]);
+    }   
+        
+    return this.text.stream()
+                        .parallel()
+                        .map((e) -> { return this.getAlph()[cryptoText.toString().indexOf(e)];  })
+                        .<String>reduce("",(acc,txt)-> acc + txt,(a1,a2)-> a1+a2);                                    
     }
     
     

@@ -5,7 +5,7 @@
  */
 package com.mycompany.controllers;
 
-import com.mycompany.ciphers.CipherServices;
+import com.mycompany.ciphers.services.CipherServices;
 import com.mycompany.languages.LANG;
 import java.io.IOException;
 import java.net.URL;
@@ -29,11 +29,8 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
  
@@ -166,6 +163,8 @@ private CipherServices services;
         switch((String)modes.getSelectedToggle().getUserData()){
             case "athena": taResText.setText(this.services.getAphineEncipher().decipher( taText.getText().toLowerCase().replaceAll(" ",""),  (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
             case "ceaser": taResText.setText(this.services.getCeaserEncipher().decipher(taText.getText().toLowerCase().replaceAll(" ",""), Integer.valueOf(this.txOffset.getText())*(-1), (LANG) languages.getSelectedToggle().getUserData()));break;
+            case "bbs": taResText.setText(this.services.getAphineEncipher().decipher( taText.getText().toLowerCase().replaceAll(" ",""),  (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
+                
         }
     }
     /**
@@ -231,7 +230,8 @@ private CipherServices services;
            				.or(taText.lengthProperty().lessThan(1))
            				.or(txAVal.lengthProperty().lessThan(1)))));
        
-        btnHack.disableProperty().bind(taText.lengthProperty().lessThan(1));
+        btnHack.disableProperty().bind(taText.lengthProperty().lessThan(1).or(rbBSSMode.selectedProperty()));
+        btnHack.visibleProperty().bind(rbBSSMode.selectedProperty().not());
         
         
         rbEng.setUserData(LANG.Eng);

@@ -1,5 +1,6 @@
-package com.mycompany.ciphers;
+package com.mycompany.ciphers.services;
 
+import com.mycompany.ciphers.Cipher;
 import com.mycompany.ciphers.annotations.AthenasCipher;
 import com.mycompany.ciphers.annotations.BBSCipher;
 import com.mycompany.ciphers.annotations.CeaserCipher;

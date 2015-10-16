@@ -1,6 +1,6 @@
 package com.mycompany.cipherproject;
 
-import com.mycompany.ciphers.CipherServices;
+import com.mycompany.ciphers.services.CipherServices;
 import com.mycompany.controllers.MainController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
