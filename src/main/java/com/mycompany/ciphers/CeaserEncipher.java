@@ -102,10 +102,10 @@ public class CeaserEncipher implements Cipher{
     @Override
     public String encipher(String line, Integer offset, LANG lang) {
         this.initialize(line, offset, lang);
-        
+        //gavno code detected, it's not my fault, it's because i must to use both way offset
         return this.getText().stream().parallel().map( (e) -> {
-            return alph[((this.language.toString().indexOf(e) + this.offset)+alph.length) % alph.length];
-        }).<String>reduce("", (acc,b)->{return acc+b;},(a,b)->{return a+b;});
+                            return alph[(this.language.toString().indexOf(e) + (this.offset % alph.length + alph.length ) ) % alph.length]; })
+                    .<String>reduce("", (acc,b)->{return acc+b;},(a,b)->{ return a+b; });
     }
     
     /**

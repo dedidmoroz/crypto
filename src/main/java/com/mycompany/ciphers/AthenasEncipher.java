@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 
 /**
  * <p>Implement algorithm of AthenasCipher</p>
@@ -136,6 +137,10 @@ public class AthenasEncipher implements Cipher{
     public String encipher(String line, LANG lang, int A, int K) {
         this.initialize(line, lang, A, K);
         this.alphTable.clear();
+        if(!isGcd(A, K)){
+            JOptionPane.showMessageDialog(null, "Is not simpler");
+            return "problem";
+        }
         return   this.getText()
                 .stream()
                 .parallel()
@@ -175,7 +180,18 @@ public class AthenasEncipher implements Cipher{
         }
         return a + b;
     }
-     
+     boolean isGcd(int a,int b){
+         while(a!=b){
+             if(a>b){
+                a-=b;
+             } else {
+                 b-=a;
+             }
+             
+         }
+         
+         return (a==1);
+     }
      /**
      * <p>Using for decipher text with Athenas algorithm</p>
      * <p>Pass the text, special values A and K and set language</p>

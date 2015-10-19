@@ -2,8 +2,6 @@ package com.mycompany.ciphers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
 import javax.swing.JOptionPane;
 
 import com.mycompany.ciphers.annotations.BBSCipher;
@@ -174,8 +172,6 @@ public class BBSEnchipher implements Cipher{
                         .<String>reduce("",(acc,txt)-> acc + txt,(a1,a2)-> a1+a2);                                    
 	}
 	
-	
-	
 	/**
 	 * <p>Uses for seeking parity bit</p>
 	 * @param a
@@ -190,36 +186,37 @@ public class BBSEnchipher implements Cipher{
     /**
      * <p>Using for decipher text with BBSCipher algorithm</p>
      * <p>Pass the text, special values A and K and set language</p>
+     * <p>Work fine without bugs only on english</p>
      * @param line Line for crypting
      * @param lang Selected language
      * @param A Special number for multipling
      * @param K Special number for sum
      * @return String, if operation is done, else return null
      */
-   @Override
+    @Override
     public String decipher(String line, LANG lang, int A, int K) {
         this.initialize(line, lang, A, K);
     	if(!initialize(A, K)){
-			JOptionPane.showMessageDialog(null, "Your numbers are not congruence.");
-			return "";
-	}
-    this.setBloomNumber(40);
-    int [] arrayOfSymbIndexes = new int[this.getAlph().length];
-    for(int i = 0;i< arrayOfSymbIndexes.length;i++){
-        arrayOfSymbIndexes[i]= ((this.getA() * i +this.getK()) % this.getBloomNumber());
-        System.out.print(arrayOfSymbIndexes[i]+ " ");
-    }
-    
-    StringBuffer cryptoText  = new StringBuffer();
-    for(int i =0;i< this.getAlph().length;i++){
-        cryptoText.append(this.getAlph()[arrayOfSymbIndexes[i]]);
-    }   
-        
-    return this.text.stream()
-                        .parallel()
-                        .map((e) -> { return this.getAlph()[cryptoText.toString().indexOf(e)];  })
-                        .<String>reduce("",(acc,txt)-> acc + txt,(a1,a2)-> a1+a2);                                    
-    }
+                JOptionPane.showMessageDialog(null, "Your numbers are not congruence.");
+ 		return "";
+        }
+        this.setBloomNumber(40);
+        int [] arrayOfSymbIndexes = new int[this.getAlph().length];
+        for(int i = 0;i< arrayOfSymbIndexes.length;i++){
+            arrayOfSymbIndexes[i]= ((this.getA() * i +this.getK()) % this.getBloomNumber());
+            System.out.print(arrayOfSymbIndexes[i]+ " ");
+        }
+
+        StringBuffer cryptoText  = new StringBuffer();
+        for(int i =0;i< this.getAlph().length;i++){
+            cryptoText.append(this.getAlph()[arrayOfSymbIndexes[i]]);
+        }   
+
+        return this.text.stream()
+                            .parallel()
+                            .map((e) -> { return this.getAlph()[cryptoText.toString().indexOf(e)];  })
+                            .<String>reduce("",(acc,txt)-> acc + txt,(a1,a2)-> a1+a2);                                    
+     }
     
     
     /**

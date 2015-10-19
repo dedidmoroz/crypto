@@ -140,8 +140,9 @@ private CipherServices services;
      */
     @FXML
     void loadFromFile(ActionEvent event) throws IOException {
+        taResText.clear();
         taText.setText(Files.readAllLines(chooser.showOpenDialog(primaryStage).toPath(),Charset.defaultCharset()).stream().parallel().reduce("", (acc,a)->acc+a,(a1,a2)->a1+a2));
-    }
+    }   
    /**
      * <p>Event for menu item Load from file</p>
      * <p>Load from file text which you want to crypt</p>
@@ -162,9 +163,9 @@ private CipherServices services;
     @FXML
     void makeDecipher(ActionEvent event) {
         switch((String)modes.getSelectedToggle().getUserData()){
-            case "athena": taResText.setText(this.services.getAphineEncipher().decipher( taText.getText().toLowerCase().replaceAll(" ",""),  (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
-            case "ceaser": taResText.setText(this.services.getCeaserEncipher().decipher(taText.getText().toLowerCase().replaceAll(" ",""), Integer.valueOf(this.txOffset.getText())*(-1), (LANG) languages.getSelectedToggle().getUserData()));break;
-            case "bbs": taResText.setText(this.services.getAphineEncipher().decipher( taText.getText().toLowerCase().replaceAll(" ",""),  (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
+            case "athena": taResText.setText(this.services.getAphineEncipher().decipher( taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""),  (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
+            case "ceaser": taResText.setText(this.services.getCeaserEncipher().decipher(taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""), Integer.valueOf(this.txOffset.getText())*(-1), (LANG) languages.getSelectedToggle().getUserData()));break;
+            case "bbs": taResText.setText(this.services.getAphineEncipher().decipher( taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""),  (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
                 
         }
     }
@@ -176,9 +177,9 @@ private CipherServices services;
     @FXML
     void makeEncipher(ActionEvent event) {
         switch((String)modes.getSelectedToggle().getUserData()){
-            case "athena": taResText.setText(this.services.getAphineEncipher().encipher( taText.getText().toLowerCase().replaceAll(" ",""), (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
-            case "ceaser": taResText.setText(this.services.getCeaserEncipher().encipher(taText.getText().toLowerCase().replaceAll(" ", ""), Integer.valueOf(this.txOffset.getText()), (LANG) languages.getSelectedToggle().getUserData()));break;
-            case "bbs": taResText.setText(this.services.getBbsEncipher().encipher( taText.getText().toLowerCase().replaceAll(" ",""), (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
+            case "athena": taResText.setText(this.services.getAphineEncipher().encipher( taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""), (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
+            case "ceaser": taResText.setText(this.services.getCeaserEncipher().encipher(taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])", "").replaceAll(":", ""), Integer.valueOf(this.txOffset.getText()), (LANG) languages.getSelectedToggle().getUserData()));break;
+            case "bbs": taResText.setText(this.services.getBbsEncipher().encipher( taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""), (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
             
         }
  
@@ -193,8 +194,8 @@ private CipherServices services;
     void makeHacking(ActionEvent event) {
         
         switch((String)modes.getSelectedToggle().getUserData()){
-            case "athena":taResText.setText(this.services.getAphineEncipher().hack(taText.getText().toLowerCase().replaceAll(" ",""), (LANG) languages.getSelectedToggle().getUserData()));break;
-            case "ceaser":taResText.setText(this.services.getCeaserEncipher().hack( taText.getText().toLowerCase().replaceAll(" ",""), (LANG) languages.getSelectedToggle().getUserData()));break;
+            case "athena":taResText.setText(this.services.getAphineEncipher().hack(taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""), (LANG) languages.getSelectedToggle().getUserData()));break;
+            case "ceaser":taResText.setText(this.services.getCeaserEncipher().hack( taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""), (LANG) languages.getSelectedToggle().getUserData()));break;
         }
     }
     
@@ -276,7 +277,7 @@ private CipherServices services;
         	
         	if(board.hasFiles()){
         		try {
-        			taText.setText(Files.readAllLines(board.getFiles().get(0).toPath(),Charset.defaultCharset()).stream().parallel().reduce("", (acc,a)->acc+a,(a1,a2)->a1+a2).replaceAll(" *", ""));
+        			taText.setText(Files.readAllLines(board.getFiles().get(0).toPath(),Charset.defaultCharset()).stream().parallel().reduce("", (acc,a)->acc+a,(a1,a2)->a1+a2).replaceAll("( *|,|.|!|\\:|_|-|[0-9])", ""));
         		} catch (Exception e1) {
         			// TODO Auto-generated catch block 
         			e1.printStackTrace();}

@@ -29,8 +29,6 @@ public class Application extends javafx.application.Application{
     	Weld weld = new Weld();
     	WeldContainer container = weld.initialize();
 
-    	
-
     	FXMLLoader loader = new FXMLLoader(Application.class.getResource("/scenes/main.fxml"));
     	loader.setControllerFactory(e -> {return new MainController(container.instance().select(CipherServices.class).get(),stage);});
 

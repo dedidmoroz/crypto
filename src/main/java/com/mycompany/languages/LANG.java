@@ -39,10 +39,14 @@ public enum LANG {
         public String getHackTable(){ return super.getAlphabet();}
     };
 
+  
+
+    
+    
     @Override
     public String toString() {
         switch (this){
-            case Eng:return "abcdefghijklmnopqrstuvwxyz@{}_:.,?!#$%^&*()-+=\"';<>";
+            case Eng:return "abcdefghijklmnopqrstuvwxyz";
             case Ru: return "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
             case Ua :return "абвгґдеєжзиіїйклмнопрстуфхцчшщьюя";
             default:return null;
