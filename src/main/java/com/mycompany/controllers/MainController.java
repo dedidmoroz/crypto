@@ -21,7 +21,9 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
@@ -29,11 +31,12 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageViewBuilder;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.controlsfx.dialog.Dialogs;
 import org.jboss.logging.Logger;
  
 
@@ -42,10 +45,10 @@ import org.jboss.logging.Logger;
  * @author scarlet_skull
  */
 public class MainController implements Initializable{
-private CipherServices services;
+private final CipherServices services;
     
-    private Stage primaryStage;
-    private FileChooser chooser = new FileChooser();
+    private final Stage primaryStage;
+    private final FileChooser chooser = new FileChooser();
     
     /**
      *
@@ -222,13 +225,22 @@ private CipherServices services;
      */
     @FXML
     void showInfo(ActionEvent event) {
-        
-        Dialogs.create()
-                .masthead("Cryptographic software")
-                .title("About program")
-                .message("This cryptographic software was created for CNU")
-                
-                .owner(primaryStage).showInformation();
+        Alert aboutWindow = new Alert(Alert.AlertType.WARNING);
+        aboutWindow.setHeaderText("Universal encipher");
+        aboutWindow.setContentText(
+                "Program was created for not\n"
+                + "commercial using at home,when you\n"
+                + "and your children haven't any work,\n"
+                + "or watch stuped movies in holidays."
+                + "Also program was created for CNU University\n"
+                + "\n"
+                + "\n"
+                + "\tCopyright @ 2015-2016 Pavlo Kuz\n \t\tAll Rights Reserved.");
+        aboutWindow.setTitle("About program");
+        aboutWindow.setResizable(false);
+        aboutWindow.initOwner(primaryStage);
+        aboutWindow.setGraphic(ImageViewBuilder.create().image(new Image(getClass().getResourceAsStream("/styles/about.png"))).fitHeight(100).fitWidth(100).build());
+        aboutWindow.showAndWait();
     }
     
     
@@ -270,9 +282,9 @@ private CipherServices services;
                                         .or(txK1.lengthProperty().lessThan(1))
                                         .or(txK2.lengthProperty().lessThan(1))
                                         .or(txK3.lengthProperty().lessThan(1))) ));
-//     //set dynamic visibility of components  
+         //set dynamic visibility of components  
         btnHack.disableProperty().bind(taText.lengthProperty().lessThan(1).or(rbBSSMode.selectedProperty()));
-        btnHack.visibleProperty().bind(rbBSSMode.selectedProperty().not());
+        btnHack.visibleProperty().bind(rbBSSMode.selectedProperty().not().and(rbGammaMode.selectedProperty().not()));
         
         
         rbEng.setUserData(LANG.Eng);
