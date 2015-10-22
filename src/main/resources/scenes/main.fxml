@@ -31,6 +31,7 @@
                   </RadioMenuItem>
                   <RadioMenuItem fx:id="rbCeaserMode" mnemonicParsing="false" selected="true" style="-fx-text-fill: black;" text="Ceasar Mode" toggleGroup="$modes" />
                   <RadioMenuItem fx:id="rbBSSMode" mnemonicParsing="false" style="-fx-text-fill: black;" text="BBS Mode" toggleGroup="$modes" />
+                  <RadioMenuItem fx:id="rbGammaMode" mnemonicParsing="false" style="-fx-text-fill: black;" text="Gamma Mode" toggleGroup="$modes" />
               </items>
             </Menu>
             <Menu mnemonicParsing="false" style="-fx-font-size: 12; -fx-text-family: serif;" text="Help">
@@ -124,6 +125,24 @@
                   </RadioButton>
                </children>
             </Pane>
+            <TextField fx:id="txK1" layoutX="282.0" layoutY="310.0" prefHeight="25.0" prefWidth="50.0" />
+            <TextField fx:id="txK3" layoutX="462.0" layoutY="310.0" prefHeight="25.0" prefWidth="50.0" />
+            <TextField fx:id="txK2" layoutX="375.0" layoutY="310.0" prefHeight="25.0" prefWidth="50.0" />
+            <Label fx:id="labK1" layoutX="263.0" layoutY="312.0" text="K1" textFill="#e8d2bae5">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="labK2" layoutX="356.0" layoutY="312.0" text="K2" textFill="#e8d2bae5">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="labK3" layoutX="442.0" layoutY="312.0" text="K3" textFill="#e8d2bae5">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </center>

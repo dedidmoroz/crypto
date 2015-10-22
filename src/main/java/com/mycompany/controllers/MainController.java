@@ -34,6 +34,7 @@ import javafx.scene.input.TransferMode;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.dialog.Dialogs;
+import org.jboss.logging.Logger;
  
 
 /**
@@ -119,6 +120,8 @@ private CipherServices services;
     private RadioMenuItem rbCeaserMode;
     @FXML
     private RadioMenuItem rbBSSMode;
+    @FXML
+    private RadioMenuItem rbGammaMode;
     
     @FXML
     private Label labOffset;
@@ -127,7 +130,19 @@ private CipherServices services;
     @FXML
     private Label labA;
     
-    
+     @FXML
+    private TextField txK3;
+    @FXML
+    private TextField txK1;
+    @FXML
+    private TextField txK2;
+
+    @FXML
+    private Label labK3;
+    @FXML
+    private Label labK2;
+    @FXML
+    private Label labK1;
     
     @FXML
     private ToggleGroup modes;
@@ -166,7 +181,7 @@ private CipherServices services;
             case "athena": taResText.setText(this.services.getAphineEncipher().decipher( taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""),  (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
             case "ceaser": taResText.setText(this.services.getCeaserEncipher().decipher(taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""), Integer.valueOf(this.txOffset.getText())*(-1), (LANG) languages.getSelectedToggle().getUserData()));break;
             case "bbs": taResText.setText(this.services.getAphineEncipher().decipher( taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""),  (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
-                
+            case "gamma": taResText.setText(this.services.getGammaCipher().decipher(taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""), (LANG) languages.getSelectedToggle().getUserData(),Integer.valueOf(this.txK1.getText()),Integer.valueOf(this.txK2.getText()),Integer.valueOf(this.txK3.getText())));
         }
     }
     /**
@@ -180,8 +195,8 @@ private CipherServices services;
             case "athena": taResText.setText(this.services.getAphineEncipher().encipher( taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""), (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
             case "ceaser": taResText.setText(this.services.getCeaserEncipher().encipher(taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])", "").replaceAll(":", ""), Integer.valueOf(this.txOffset.getText()), (LANG) languages.getSelectedToggle().getUserData()));break;
             case "bbs": taResText.setText(this.services.getBbsEncipher().encipher( taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""), (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
-            
-        }
+            case "gamma": taResText.setText(this.services.getGammaCipher().encipher(taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""), (LANG) languages.getSelectedToggle().getUserData(),Integer.valueOf(this.txK1.getText()),Integer.valueOf(this.txK2.getText()),Integer.valueOf(this.txK3.getText())));
+       }
  
     }
     /**
@@ -226,7 +241,7 @@ private CipherServices services;
     public void initialize(URL url, ResourceBundle rb) {
         btnSave.disableProperty().bind(taResText.lengthProperty().lessThan(1));
         btnLoad.disableProperty().bind(taText.lengthProperty().greaterThan(1));
-       
+       //set dynamic control of enabling of crypt and decrypt buttons
         btnEnc.disableProperty().bind(
         			(taText.lengthProperty().lessThan(1).or(txOffset.lengthProperty().lessThan(1))
         		.and(rbAthenaMode.selectedProperty().not()
@@ -234,9 +249,13 @@ private CipherServices services;
         				.or(taText.lengthProperty().lessThan(1))
         				.or(txAVal.lengthProperty().lessThan(1)))
         		.and(rbBSSMode.selectedProperty().not()
-               			.or(txKVal.lengthProperty().lessThan(1))
+                                        .or(txKVal.lengthProperty().lessThan(1))
           				.or(taText.lengthProperty().lessThan(1))
-           				.or(txAVal.lengthProperty().lessThan(1)))));
+           				.or(txAVal.lengthProperty().lessThan(1)))
+                        .and(rbGammaMode.selectedProperty().not()
+                                        .or(txK1.lengthProperty().lessThan(1))
+                                        .or(txK2.lengthProperty().lessThan(1))
+                                        .or(txK3.lengthProperty().lessThan(1)))));
         btnDec.disableProperty().bind(
         			(taText.lengthProperty().lessThan(1).or(txOffset.lengthProperty().lessThan(1))
         		.and(rbAthenaMode.selectedProperty().not()
@@ -246,8 +265,12 @@ private CipherServices services;
         		.and(rbBSSMode.selectedProperty().not()
            				.or(txKVal.lengthProperty().lessThan(1))
            				.or(taText.lengthProperty().lessThan(1))
-           				.or(txAVal.lengthProperty().lessThan(1)))));
-       
+           				.or(txAVal.lengthProperty().lessThan(1)))
+                        .and(rbGammaMode.selectedProperty().not()
+                                        .or(txK1.lengthProperty().lessThan(1))
+                                        .or(txK2.lengthProperty().lessThan(1))
+                                        .or(txK3.lengthProperty().lessThan(1))) ));
+//     //set dynamic visibility of components  
         btnHack.disableProperty().bind(taText.lengthProperty().lessThan(1).or(rbBSSMode.selectedProperty()));
         btnHack.visibleProperty().bind(rbBSSMode.selectedProperty().not());
         
@@ -262,13 +285,23 @@ private CipherServices services;
         
         txAVal.visibleProperty().bind(rbAthenaMode.selectedProperty().or(rbBSSMode.selectedProperty()));
         txKVal.visibleProperty().bind(rbAthenaMode.selectedProperty().or(rbBSSMode.selectedProperty()));
-    
+   
+        
         labA.visibleProperty().bind(rbAthenaMode.selectedProperty().or(rbBSSMode.selectedProperty()));
         labK.visibleProperty().bind(rbAthenaMode.selectedProperty().or(rbBSSMode.selectedProperty()));
-        
+   
+        labK1.visibleProperty().bind(rbGammaMode.selectedProperty());
+        labK2.visibleProperty().bind(rbGammaMode.selectedProperty());
+        labK3.visibleProperty().bind(rbGammaMode.selectedProperty());
+        txK1.visibleProperty().bind(rbGammaMode.selectedProperty());
+        txK2.visibleProperty().bind(rbGammaMode.selectedProperty());
+        txK3.visibleProperty().bind(rbGammaMode.selectedProperty());
+        //set user data for changing between ciphers
         rbAthenaMode.setUserData("athena");
         rbCeaserMode.setUserData("ceaser");
         rbBSSMode.setUserData("bbs");
+        rbGammaMode.setUserData("gamma");
+        //set drag-and-drop feature
         taText.setOnDragEntered(e-> {taText.setStyle("-fx-background-color:red;");});
         taText.setOnDragExited(e-> {taText.setStyle("-fx-background-color:teal;");});
         taText.setOnDragOver(e->{ e.acceptTransferModes(TransferMode.ANY); });
@@ -280,7 +313,7 @@ private CipherServices services;
         			taText.setText(Files.readAllLines(board.getFiles().get(0).toPath(),Charset.defaultCharset()).stream().parallel().reduce("", (acc,a)->acc+a,(a1,a2)->a1+a2).replaceAll("( *|,|.|!|\\:|_|-|[0-9])", ""));
         		} catch (Exception e1) {
         			// TODO Auto-generated catch block 
-        			e1.printStackTrace();}
+        			Logger.getLogger(MainController.class).log(Logger.Level.ERROR, e1.getMessage(),e1);}
         	} else {
         		JOptionPane.showMessageDialog(null, "Problem with loaded file.");
         	}});
