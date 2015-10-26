@@ -183,7 +183,7 @@ private final CipherServices services;
         switch((String)modes.getSelectedToggle().getUserData()){
             case "athena": taResText.setText(this.services.getAphineEncipher().decipher( taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""),  (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
             case "ceaser": taResText.setText(this.services.getCeaserEncipher().decipher(taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""), Integer.valueOf(this.txOffset.getText())*(-1), (LANG) languages.getSelectedToggle().getUserData()));break;
-            case "bbs": taResText.setText(this.services.getAphineEncipher().decipher( taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""),  (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
+            case "bbs": taResText.setText(this.services.getBbsEncipher().decipher( taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""),  (LANG) languages.getSelectedToggle().getUserData(), Integer.valueOf(txAVal.getText()),Integer.valueOf(txKVal.getText())));break;
             case "gamma": taResText.setText(this.services.getGammaCipher().decipher(taText.getText().toLowerCase().replaceAll("( *|,|.|!|\\:|_|-|[0-9])","").replaceAll(":", ""), (LANG) languages.getSelectedToggle().getUserData(),Integer.valueOf(this.txK1.getText()),Integer.valueOf(this.txK2.getText()),Integer.valueOf(this.txK3.getText())));
         }
     }

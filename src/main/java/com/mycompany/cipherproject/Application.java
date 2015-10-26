@@ -16,30 +16,30 @@ import org.jboss.weld.environment.se.WeldContainer;
  */
 public class Application extends javafx.application.Application{
 
-    /**
-     *
-     * @param args
-     */
+	/**
+	 *
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
 
-    @Override
-    public void start(Stage stage) throws Exception {
-    	Weld weld = new Weld();
-    	WeldContainer container = weld.initialize();
+	@Override
+	public void start(Stage stage) throws Exception {
+		Weld weld = new Weld();
+		WeldContainer container = weld.initialize();
 
-    	FXMLLoader loader = new FXMLLoader(Application.class.getResource("/scenes/main.fxml"));
-    	loader.setControllerFactory(e -> {return new MainController(container.instance().select(CipherServices.class).get(),stage);});
+		FXMLLoader loader = new FXMLLoader(Application.class.getResource("/scenes/main.fxml"));
+		loader.setControllerFactory(e -> {return new MainController(container.instance().select(CipherServices.class).get(),stage);});
 
-    	Scene scene = new Scene((Parent) loader.load());
-    	scene.getStylesheets().add(getClass().getResource("/styles/style.css").toString());
+		Scene scene = new Scene((Parent) loader.load());
+		scene.getStylesheets().add(getClass().getResource("/styles/style.css").toString());
 
-    	stage.getIcons().add(new Image(getClass().getResourceAsStream("/styles/icon.png")));
-    	stage.setScene(scene);
-    	stage.setResizable(false);
-    	stage.setTitle("Enchipher");
-    	stage.setOnCloseRequest(e->{System.exit(0);});
-    	stage.show();
-    }
+		stage.getIcons().add(new Image(getClass().getResourceAsStream("/styles/icon.png")));
+		stage.setScene(scene);
+		stage.setResizable(false);
+		stage.setTitle("Enchipher");
+		stage.setOnCloseRequest(e->{System.exit(0);});
+		stage.show();
+	}
 }
