@@ -1,10 +1,10 @@
 package com.mycompany.ciphers;
 
-import java.util.*;
-import javax.swing.JOptionPane;
-
 import com.mycompany.ciphers.annotations.BBSCipher;
 import com.mycompany.languages.LANG;
+
+import javax.swing.*;
+import java.util.*;
 
 /**
  * <p>Implement algorithm of BBSCipherCipher</p>
@@ -15,7 +15,7 @@ import com.mycompany.languages.LANG;
  */
 @BBSCipher
 public class BBSEnchipher implements Cipher {
-
+    private Integer randomNumber;
     /**
      * <p>Uses for setting bloom number<p>
      */
@@ -28,6 +28,7 @@ public class BBSEnchipher implements Cipher {
     private char[] alph;
     private int K;
     private int A;
+    byte result = 0b00000000;
 
 
     public BBSEnchipher() {
@@ -194,31 +195,36 @@ public class BBSEnchipher implements Cipher {
             return "";
         }
         this.setBloomNumber(A*K);
-        Integer generatedNumber = this.generateValue(this.getBloomNumber());
-        System.out.println("My number:"+generatedNumber);
+        this.randomNumber = this.generateValue(this.getBloomNumber());
+        System.out.println("My number:"+this.randomNumber);
 
         //build table of random numbers and then build table with junior bit of every number
-        int x0 = (int) (Math.pow(generatedNumber.doubleValue(),2) % this.getBloomNumber());
+        int x0 = (int) (Math.pow(this.randomNumber.doubleValue(),2) % this.getBloomNumber());
         byte s0 = (byte) (x0 % 2);
 
-        int[] arrayOfSymbIndexes = new int[this.getAlph().length];
-        byte[] arrayOfBits = new byte[this.getAlph().length];
+        int[] arrayOfSymbIndexes = new int[this.alph.length];
+        byte[] arrayOfBits = new byte[this.alph.length];
 
-        arrayOfSymbIndexes[0]
-                = x0;
+        arrayOfSymbIndexes[0] = x0;
         arrayOfBits[0] = s0;
-
-        for (int i = 1; i < arrayOfSymbIndexes.length; i++) {
-            arrayOfSymbIndexes[i] = (arrayOfSymbIndexes[i-1] * arrayOfSymbIndexes[i-1]) % this.getBloomNumber();
+        for (int i = 1; i < 8; i++) {
+            arrayOfSymbIndexes[i] = (arrayOfSymbIndexes[i-1] * arrayOfSymbIndexes[i-1]+i) % this.getBloomNumber();
             arrayOfBits[i] = (byte) (arrayOfSymbIndexes[i] % 2);
-            System.out.println(arrayOfBits[i] + " " + arrayOfSymbIndexes[i]);
+            System.out.println(arrayOfSymbIndexes[i-1] + " % "+ arrayOfBits[i] + " | " + arrayOfSymbIndexes[i]);
         }
 
-        return this.text.stream()
+        for(int i =0 ; i< 8;i++ ){
+            result = (byte)((result|arrayOfBits[8-i]) << 1);
+            System.out.println(result);
+        }
+        return this.text
+                .stream()
                 .parallel()
                 .map((e) -> {
-                    this.cipherRelative.put(this.alph[arrayOfSymbIndexes[language.toString().indexOf(e)] % this.alph.length], e);
-                    return this.alph[arrayOfSymbIndexes[language.toString().indexOf(e)] % this.alph.length]; })
+                    char res = alph[(((this.language.toString().indexOf(e) ^ result) % this.alph.length) + this.alph.length) % this.alph.length];
+                    this.cipherRelative.put(res,e);
+                    return res;
+                })
                 .<String>reduce("", (acc, txt) -> acc + txt, (a1, a2) -> a1 + a2);
     }
 
@@ -229,11 +235,11 @@ public class BBSEnchipher implements Cipher {
      * @param b
      * @return parity bit, if it exist.
      */
+
     private Byte getParityBit(Integer a, Integer b) {
         return null;
 
     }
-
     /**
      * <p>Using for decipher text with BBSCipher algorithm</p>
      * <p>Pass the text, special values A and K and set language</p>
@@ -248,16 +254,35 @@ public class BBSEnchipher implements Cipher {
     @Override
     public String decipher(String line, LANG lang, int A, int K) {
         this.initialize(line, lang, A, K);
-        System.out.println("This is map:" + this.cipherRelative);
+
+        //build table of random numbers and then build table with junior bit of every number
+        int x0 = (int) (Math.pow(this.randomNumber.doubleValue(),2) % this.getBloomNumber());
+        byte s0 = (byte) (x0 % 2);
+
+        int[] arrayOfSymbIndexes = new int[this.alph.length];
+        byte[] arrayOfBits = new byte[this.alph.length];
+
+        arrayOfSymbIndexes[0] = x0;
+        arrayOfBits[0] = s0;
+        for (int i = 1; i < 8; i++) {
+            arrayOfSymbIndexes[i] = (arrayOfSymbIndexes[i-1] * arrayOfSymbIndexes[i-1]+i) % this.getBloomNumber();
+            arrayOfBits[i] = (byte) (arrayOfSymbIndexes[i] % 2);
+            System.out.println(arrayOfSymbIndexes[i-1] + " % "+ arrayOfBits[i] + " | " + arrayOfSymbIndexes[i]);
+        }
+
+        for(int i =0 ; i< 8;i++ ){
+            result = (byte)((result|arrayOfBits[8-i]) << 1);
+            System.out.println(result);
+        }
+
+
         return this.text.stream()
                 .parallel()
                 .map((e) -> {
-                    return cipherRelative.get(e);
+                    return this.cipherRelative.get(e);
                 })
                 .<String>reduce("", (acc, txt) -> acc + txt, (a1, a2) -> a1 + a2);
     }
-
-
     /**
      * <p>Use it for seeking greatest common divisor</p>
      *
